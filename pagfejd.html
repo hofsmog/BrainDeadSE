@@ -575,9 +575,7 @@
         const text = await res.text();
         DICTIONARY = new Set(
           text
-            .split(/
-?
-/)
+            .split(/\r?\n/)
             .map(w => w.trim().toLowerCase())
             .filter(w => w.length > 1 && !w.startsWith('#') && !w.startsWith('*'))
         );
