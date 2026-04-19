@@ -1,0 +1,246 @@
+# A
+ablaja
+ablajig
+agg
+agga
+aggig
+ajja
+ajig
+apig
+aptråkig
+arg
+avig
+
+# B
+balle
+ballekaka
+ball
+ballt
+baxa
+baxig
+bekymrig
+blänga
+bläng
+blöt
+bök
+böka
+bökig
+braka
+brakig
+bröla
+bula
+bulig
+busig
+bärs
+
+# C
+cool
+coolt
+
+# D
+darra
+darrig
+dega
+degig
+dissa
+diss
+dissig
+däng
+dänga
+dängd
+dålig
+
+# E
+elak
+eländig
+
+# F
+flabb
+flabba
+flänga
+flipp
+flippa
+flippig
+flum
+flumma
+flummig
+fniss
+fnissa
+fnissig
+fräck
+fränt
+ful
+fånig
+
+# G
+gapa
+gapig
+gasa
+gasig
+glotta
+glutt
+gnälla
+gnäll
+grina
+grin
+grinig
+grym
+grymt
+gräla
+gött
+götta
+
+# H
+hänga
+hialös
+hajja
+hosta
+hostig
+håna
+hånig
+hutta
+
+# I
+illa
+illasinnad
+
+# J
+jäkla
+jäkligt
+jävlig
+jävligt
+jävel
+
+# K
+käbbla
+käbbel
+käka
+käk
+käft
+käfta
+klydd
+klydda
+klyddig
+klydderöv
+kånka
+kneg
+knuffa
+knuff
+knäpp
+knäppig
+kolla
+kollig
+korkad
+kramig
+krasha
+krasch
+
+# L
+lajna
+luffa
+luffare
+lurig
+lura
+
+# M
+mög
+mögig
+mäkta
+mäktig
+
+# N
+najs
+nä
+nja
+
+# O
+orka
+ostig
+
+# P
+påg
+pågar
+päror
+pilla
+palla
+
+# Q
+quiz
+quick
+
+# R
+rälig
+rulla
+rullebör
+ramla
+
+# S
+sabba
+snappa
+snubbla
+slabb
+slabba
+slafsa
+smälla
+smäll
+skit
+skita
+sketen
+sketa
+skitsnack
+skitbra
+skitkul
+skitdålig
+soft
+softa
+sticka
+supa
+sprit
+snyting
+
+# T
+tös
+töser
+tjack
+trams
+trilla
+
+# U
+usch
+
+# V
+va
+vafan
+vaddå
+vetu
+vettu
+
+# W
+wow
+
+# X
+xtra
+
+# Y
+yr
+yra
+
+# Z
+zebra
+
+# Å
+åka
+åker
+åkte
+ålahue
+ålahuve
+
+# Ä
+äta
+äter
+ätit
+
+# Ö
+öl
+öla
+ölig
