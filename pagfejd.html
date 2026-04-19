@@ -567,9 +567,33 @@
       a:8,b:2,c:1,d:5,e:8,f:2,g:3,h:2,i:5,j:1,k:3,l:5,m:3,n:6,o:4,p:2,q:1,r:8,s:8,t:8,u:3,v:2,w:1,x:1,y:1,z:1,å:2,ä:2,ö:2
     };
 
-    const DICTIONARY = new Set([
-      'påg','tös','mög','rälig','balle','skåne','malmö','lund','glass','katt','hund','boll','hus','sol','sommar','vår','höst','vinter','cykel','bil','mål','lag','spel','ord','rad','kol','gul','svart','sjuk','rolig','knas','kaos','brain','dead','braindead','fejd','pågfejd','ost','bröd','öl','fika','korv','snus','grus','gris','sill','sopa','båt','hav','bro','stan','park','gata','gränd','pågar','töser','skalle','hjärna','skratta','dum','dumskalle','tok','tokig','rulle','påse','stol','bord','tak','vägg','äpple','päron','banan','potatis','päror','lök','fisk','räka','kaffe','macka','socker','salt','peppar','soppa','brygga','hamn','strand','falk','uggla','räv','björn','anka','kråka','mat','godis','fest','fredag','lördag','söndag','tisdag','onsdag','torsdag','måndag'
-    ]);
+    let DICTIONARY = new Set();
+
+    async function loadDictionary() {
+      try {
+        const res = await fetch('/words.txt');
+        const text = await res.text();
+        DICTIONARY = new Set(
+          text
+            .split(/
+?
+/)
+            .map(w => w.trim().toLowerCase())
+            .filter(w => w.length > 1 && !w.startsWith('#') && !w.startsWith('*'))
+        );
+
+        ['påg','tös','mög','rälig','balle','klydd','päror','hialös','fubbick','rullebör'].forEach(word => {
+          DICTIONARY.add(word);
+        });
+
+        
+      } catch (err) {
+        console.error('Kunde inte ladda words.txt', err);
+        DICTIONARY = new Set(['påg','tös','mög','rälig','balle','skåne','malmö','lund','glass','katt','hund','boll','hus','sol','ord','spel']);
+        dictCountEl.textContent = DICTIONARY.size;
+        setMessage('words.txt kunde inte laddas. Jag kör en liten reservordlista tills vidare.', 'error');
+      }
+    }
 
     const BONUS = Array.from({ length: SIZE }, () => Array.from({ length: SIZE }, () => ''));
     const setBonus = (coords, type) => coords.forEach(([r, c]) => BONUS[r][c] = type);
@@ -1066,7 +1090,12 @@
     document.getElementById('swapBtn').addEventListener('click', swapAllTiles);
     document.getElementById('newGameBtn').addEventListener('click', startNewGame);
 
-    startNewGame();
+    async function initGame() {
+      await loadDictionary();
+      startNewGame();
+    }
+
+    initGame();
   </script>
 </body>
 </html>
