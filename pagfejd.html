@@ -571,7 +571,7 @@
 
     async function loadDictionary() {
       try {
-        const res = await fetch('/words.txt');
+        const res = await fetch('words.txt');
         const text = await res.text();
         DICTIONARY = new Set(
           text
@@ -1057,7 +1057,7 @@
       renderAll();
       setMessage(`Datorn la "${best.word}" och tog ${best.score} poäng. Nu är det din tur igen.`, 'ok');
     }
-
+    
     function startNewGame() {
       board = createEmptyBoard();
       bag = makeBag();
