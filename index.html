@@ -1,134 +1,134 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BrainDeadSE – Spel, kaos & totalt meningslöst trams</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrainDeadSE</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #07070b;
-      color: white;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #05060b;
+  color: white;
+  text-align: center;
+}
 
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px;
-    }
+/* 🔥 LOGGA */
+.logo {
+  margin-top: 40px;
+}
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+.logo img {
+  width: 320px;
+  max-width: 80%;
+  filter: drop-shadow(0 0 25px rgba(255, 204, 0, 0.7));
+}
 
-    .logo img {
-      height: 45px;
-      filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.6));
-    }
+/* HERO */
+.hero {
+  margin-top: 20px;
+}
 
-    .logo span {
-      font-weight: bold;
-      font-size: 1.2rem;
-      color: #ffd400;
-    }
+.hero h1 {
+  font-size: 2.5rem;
+  color: #ffd400;
+  margin-bottom: 10px;
+}
 
-    .hero {
-      text-align: center;
-      padding: 40px 20px;
-    }
+.hero p {
+  color: #aaa;
+  font-size: 1.1rem;
+}
 
-    .hero h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-      color: #ffd400;
-    }
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  padding: 40px 20px;
+  max-width: 1100px;
+  margin: auto;
+}
 
-    .hero p {
-      color: #aaa;
-    }
+/* CARD */
+.card {
+  background: #111320;
+  padding: 25px;
+  border-radius: 20px;
+  transition: 0.25s;
+  text-decoration: none;
+  color: white;
+  text-align: left;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      padding: 20px;
-    }
+.card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 40px rgba(255, 204, 0, 0.25);
+}
 
-    .card {
-      background: #111320;
-      padding: 20px;
-      border-radius: 15px;
-      transition: 0.2s;
-      cursor: pointer;
-      text-decoration: none;
-      color: white;
-    }
+/* ICON + TITLE */
+.card h2 {
+  color: #ffd400;
+  margin-bottom: 10px;
+}
 
-    .card:hover {
-      transform: translateY(-6px) scale(1.02);
-      box-shadow: 0 10px 30px rgba(255, 204, 0, 0.2);
-    }
+.card p {
+  color: #bbb;
+}
 
-    .card h2 {
-      color: #ffd400;
-      margin-bottom: 10px;
-    }
+/* FOOTER */
+.footer {
+  color: #666;
+  margin-top: 40px;
+  padding-bottom: 30px;
+}
+</style>
 
-    .footer {
-      text-align: center;
-      color: #666;
-      margin-top: 40px;
-      padding-bottom: 20px;
-    }
-  </style>
 </head>
 
 <body>
 
-  <div class="header">
-    <div class="logo">
-      <img src="/logo.png" alt="BrainDeadSE logo">
-      <span>BrainDeadSE</span>
-    </div>
-  </div>
+<!-- 🔥 LOGGA MITTEN -->
+<div class="logo">
+  <img src="/logo.png" alt="logo">
+</div>
 
-  <div class="hero">
-    <h1>Sveriges mest hjärndöda spel</h1>
-    <p>Spel, kaos & totalt meningslöst trams 🤝</p>
-  </div>
+<!-- HERO TEXT -->
+<div class="hero">
+  <h1>Sveriges mest hjärndöda spel</h1>
+  <p>Spel, kaos & totalt meningslöst trams 🤝</p>
+</div>
 
-  <div class="grid">
+<!-- CARDS -->
+<div class="grid">
 
-    <a class="card" href="/pagfejd.html">
-      <h2>🔥 Pågfejd</h2>
-      <p>Ordspel på skånska. Lägg ord, få poäng och bråka om vad som är ett riktigt ord.</p>
-    </a>
+  <a class="card" href="/pagfejd.html">
+    <h2>🔥 Pågfejd</h2>
+    <p>Ordspel på skånska. Lägg ord, få poäng och bråka om vad som är ett riktigt ord.</p>
+  </a>
 
-    <a class="card" href="#">
-      <h2>🧠 Hur skånsk är du?</h2>
-      <p>Quiz som avgör om du är en riktig påg eller bara spelar.</p>
-    </a>
+  <a class="card" href="#">
+    <h2>🧠 Hur skånsk är du?</h2>
+    <p>Quiz som avgör om du är en riktig påg eller bara spelar.</p>
+  </a>
 
-    <a class="card" href="#">
-      <h2>🎭 Karaktärer</h2>
-      <p>Möt alla sjuka figurer från BrainDead-universumet.</p>
-    </a>
+  <a class="card" href="#">
+    <h2>🎭 Karaktärer</h2>
+    <p>Möt alla sjuka figurer från BrainDead-universumet.</p>
+  </a>
 
-    <a class="card" href="#">
-      <h2>💀 Kommer snart</h2>
-      <p>Fler spel och ännu mer hjärndött innehåll är på väg.</p>
-    </a>
+  <a class="card" href="#">
+    <h2>💀 Kommer snart</h2>
+    <p>Fler spel och ännu mer hjärndött innehåll är på väg.</p>
+  </a>
 
-  </div>
+</div>
 
-  <div class="footer">
-    © 2026 BrainDeadSE – byggt med noll hjärnceller
-  </div>
+<!-- FOOTER -->
+<div class="footer">
+  © 2026 BrainDeadSE – byggt med noll hjärnceller
+</div>
 
 </body>
 </html>
