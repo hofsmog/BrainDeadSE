@@ -597,6 +597,25 @@
     setMessage('words.txt kunde inte laddas. Jag kör en liten reservordlista tills vidare.', 'error');
   }
 }
+    async function loadSkanska() {
+  try {
+    const res = await fetch('skanska.txt');
+    const text = await res.text();
+
+    text.split(/\r?\n/).forEach(word => {
+      const w = word.trim().toLowerCase();
+
+      if (w && !w.startsWith('#')) {
+        DICTIONARY.add(w);
+      }
+    });
+
+    console.log('🔥 Skånska ord laddade');
+
+  } catch (err) {
+    console.error('❌ Kunde inte ladda skanska.txt', err);
+  }
+}
 
     const BONUS = Array.from({ length: SIZE }, () => Array.from({ length: SIZE }, () => ''));
     const setBonus = (coords, type) => coords.forEach(([r, c]) => BONUS[r][c] = type);
@@ -1094,7 +1113,13 @@
     document.getElementById('newGameBtn').addEventListener('click', startNewGame);
 
     async function initGame() {
-  await loadDictionary();
+  await loadDictionary(); // svenska först
+  await loadSkanska();    // sen skånska
+
+  dictCountEl.textContent = DICTIONARY.size;
+
+  console.log('🔥 TOTAL ORD:', DICTIONARY.size);
+
   startNewGame();
 }
 
