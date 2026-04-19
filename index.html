@@ -1,151 +1,618 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BrainDeadSE</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BrainDeadSE</title>
+  <meta name="description" content="BrainDeadSE – spel, kaos och totalt meningslöst trams." />
+  <meta name="theme-color" content="#05060b" />
 
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #05060b;
-  color: white;
-  text-align: center;
-}
+  <style>
+    :root {
+      --bg: #05060b;
+      --bg2: #0b0d16;
+      --card: rgba(14, 18, 34, 0.92);
+      --card-border: rgba(255, 255, 255, 0.06);
+      --text: #f4f6ff;
+      --muted: #b7bfd4;
+      --yellow: #ffd400;
+      --yellow-2: #ffb800;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+      --radius: 26px;
+      --max: 1220px;
+    }
 
-/* LOGGA */
-.logo {
-  margin-top: 60px;
-  animation: floatLogo 4s ease-in-out infinite;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-.logo img {
-  width: 360px;
-  animation: glowPulse 3s ease-in-out infinite;
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-/* 🔥 STOR BILD */
-.hero-image {
-  margin-top: 30px;
-}
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 200, 0, 0.08), transparent 28%),
+        radial-gradient(circle at 20% 20%, rgba(255, 200, 0, 0.05), transparent 18%),
+        linear-gradient(180deg, #04050a 0%, #060811 40%, #04050a 100%);
+      overflow-x: hidden;
+    }
 
-.hero-image img {
-  width: 100%;
-  max-width: 600px; /* 👈 viktig */
-  height: auto;
-}
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-/* TEXT */
-.hero {
-  margin-top: 30px;
-}
+    .bg-glow {
+      position: fixed;
+      inset: auto;
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      background: rgba(255, 200, 0, 0.07);
+      filter: blur(90px);
+      pointer-events: none;
+      z-index: 0;
+      animation: drift 8s ease-in-out infinite;
+    }
 
-.hero h1 {
-  font-size: 2.5rem;
-  color: #ffd400;
-}
+    .bg-glow.one {
+      top: 40px;
+      left: -120px;
+    }
 
-.hero p {
-  color: #aaa;
-}
+    .bg-glow.two {
+      top: 80px;
+      right: -120px;
+      animation-delay: -3s;
+    }
 
-/* CARDS */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 25px;
-  padding: 50px 20px;
-  max-width: 1100px;
-  margin: auto;
-}
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 26px 18px 50px;
+    }
 
-.card {
-  background: #0f1220;
-  padding: 25px;
-  border-radius: 18px;
-  text-align: left;
-  transition: 0.25s;
-}
+    .topline {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
 
-.card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 10px 40px rgba(255, 200, 0, 0.2);
-}
+    .top-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255, 212, 0, 0.08);
+      border: 1px solid rgba(255, 212, 0, 0.14);
+      color: var(--yellow);
+      font-weight: 700;
+      font-size: 0.95rem;
+      backdrop-filter: blur(8px);
+    }
 
-.card h2 {
-  color: #ffd400;
-}
+    .hero {
+      text-align: center;
+      padding-top: 8px;
+    }
 
-/* FOOTER */
-.footer {
-  color: #666;
-  margin-top: 30px;
-  padding-bottom: 30px;
-}
+    .logo-wrap {
+      display: inline-block;
+      animation: logoFloat 4.2s ease-in-out infinite;
+    }
 
-/* ANIMATION */
-@keyframes glowPulse {
-  0% { filter: drop-shadow(0 0 10px rgba(255,200,0,0.5)); }
-  50% { filter: drop-shadow(0 0 30px rgba(255,200,0,1)); }
-  100% { filter: drop-shadow(0 0 10px rgba(255,200,0,0.5)); }
-}
+    .logo-wrap img {
+      width: 230px;
+      max-width: 72vw;
+      display: block;
+      filter:
+        drop-shadow(0 0 10px rgba(255, 200, 0, 0.45))
+        drop-shadow(0 0 26px rgba(255, 170, 0, 0.30));
+      animation: logoPulse 3s ease-in-out infinite;
+    }
 
-@keyframes floatLogo {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
-  100% { transform: translateY(0px); }
-}
+    .hero-image {
+      margin: 22px auto 0;
+      width: min(100%, 820px);
+      position: relative;
+      display: block;
+    }
 
-</style>
+    .hero-image::before {
+      content: "";
+      position: absolute;
+      inset: 8% 12% auto 12%;
+      height: 70%;
+      background: rgba(255, 190, 0, 0.12);
+      filter: blur(70px);
+      z-index: -1;
+      border-radius: 50%;
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 28px;
+      object-fit: contain;
+      filter: drop-shadow(0 22px 50px rgba(0, 0, 0, 0.45));
+      animation: imageFloat 5.5s ease-in-out infinite;
+    }
+
+    .hero-copy {
+      margin: 26px auto 0;
+      max-width: 900px;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--yellow);
+      font-size: clamp(2.2rem, 5vw, 4.3rem);
+      line-height: 0.98;
+      letter-spacing: -1.8px;
+      font-weight: 900;
+      text-wrap: balance;
+    }
+
+    .sub {
+      margin: 18px auto 0;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    .btn {
+      min-height: 52px;
+      padding: 0 20px;
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      border: 1px solid transparent;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      color: #111;
+      background: linear-gradient(135deg, var(--yellow), var(--yellow-2));
+      box-shadow: 0 16px 40px rgba(255, 200, 0, 0.2);
+    }
+
+    .btn-secondary {
+      color: var(--text);
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(255,255,255,0.08);
+    }
+
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .stat {
+      min-width: 150px;
+      padding: 14px 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      backdrop-filter: blur(10px);
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--yellow);
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .section {
+      margin-top: 54px;
+    }
+
+    .section-head {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      letter-spacing: -0.8px;
+    }
+
+    .section-head p {
+      margin: 10px auto 0;
+      max-width: 700px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(16, 20, 36, 0.92), rgba(9, 12, 24, 0.95));
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.04), transparent 35%),
+        radial-gradient(circle at top right, rgba(255, 200, 0, 0.08), transparent 24%);
+      pointer-events: none;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 26px 70px rgba(0, 0, 0, 0.5);
+      border-color: rgba(255, 212, 0, 0.18);
+    }
+
+    .card.featured {
+      grid-column: span 6;
+      min-height: 280px;
+      background:
+        linear-gradient(180deg, rgba(35, 28, 7, 0.28), rgba(9, 12, 24, 0.95)),
+        linear-gradient(180deg, rgba(16, 20, 36, 0.92), rgba(9, 12, 24, 0.95));
+    }
+
+    .card.normal {
+      grid-column: span 3;
+      min-height: 230px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .badge.hot {
+      color: var(--yellow);
+      background: rgba(255, 212, 0, 0.08);
+      border-color: rgba(255, 212, 0, 0.14);
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: clamp(1.4rem, 2vw, 2rem);
+      letter-spacing: -0.6px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .link-text {
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .arrow {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+
+    .card:hover .arrow {
+      transform: translateX(4px);
+      background: rgba(255,255,255,0.1);
+    }
+
+    .ticker {
+      margin-top: 30px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .ticker-track {
+      display: flex;
+      gap: 32px;
+      white-space: nowrap;
+      min-width: max-content;
+      padding: 14px 18px;
+      color: var(--muted);
+      animation: tickerMove 22s linear infinite;
+    }
+
+    .ticker-track strong {
+      color: var(--yellow);
+    }
+
+    .footer {
+      margin-top: 40px;
+      padding-top: 26px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      text-align: center;
+      color: #8f97ad;
+      line-height: 1.7;
+    }
+
+    @keyframes logoPulse {
+      0%, 100% {
+        filter:
+          drop-shadow(0 0 10px rgba(255, 200, 0, 0.45))
+          drop-shadow(0 0 26px rgba(255, 170, 0, 0.30));
+        transform: scale(1);
+      }
+      50% {
+        filter:
+          drop-shadow(0 0 18px rgba(255, 210, 0, 0.75))
+          drop-shadow(0 0 38px rgba(255, 160, 0, 0.48))
+          drop-shadow(0 0 70px rgba(255, 120, 0, 0.18));
+        transform: scale(1.035);
+      }
+    }
+
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes imageFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    @keyframes tickerMove {
+      from { transform: translateX(0); }
+      to { transform: translateX(-33%); }
+    }
+
+    @keyframes drift {
+      0%, 100% { transform: translateY(0) translateX(0); }
+      50% { transform: translateY(-12px) translateX(10px); }
+    }
+
+    @media (max-width: 1020px) {
+      .card.featured,
+      .card.normal {
+        grid-column: span 6;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .wrap {
+        padding: 18px 14px 40px;
+      }
+
+      .hero-image {
+        width: min(100%, 620px);
+      }
+
+      .hero-actions {
+        gap: 10px;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .stat {
+        flex: 1 1 calc(50% - 12px);
+        min-width: 0;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card.featured,
+      .card.normal {
+        grid-column: span 1;
+      }
+
+      .card {
+        min-height: unset;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="bg-glow one"></div>
+  <div class="bg-glow two"></div>
 
-<!-- LOGGA -->
-<div class="logo">
-  <img src="/logo.png" alt="logo">
-</div>
+  <main class="wrap">
+    <div class="topline">
+      <div class="top-pill">🔥 Spel, kaos och totalt onödigt internet</div>
+    </div>
 
-<!-- 🔥 DIN BILD -->
-<div class="hero-image">
-  <img src="/1.png" alt="hero image">
-</div>
+    <section class="hero">
+      <div class="logo-wrap">
+        <img src="/logo.png" alt="BrainDeadSE logo" />
+      </div>
 
-<!-- TEXT -->
-<div class="hero">
-  <h1>Sveriges mest hjärndöda spel</h1>
-  <p>Spel, kaos & totalt meningslöst trams 🤝</p>
-</div>
+      <a class="hero-image" href="/pagfejd.html">
+        <img src="/1.png" alt="BrainDeadSE hero" />
+      </a>
 
-<!-- CARDS -->
-<div class="grid">
+      <div class="hero-copy">
+        <h1>Sveriges mest hjärndöda spel</h1>
+        <p class="sub">
+          Här bor märkliga idéer, skånskt kaos, dumma spel, konstiga figurer och exakt den sortens internet
+          som absolut inte borde finnas men ändå känns helt rätt.
+        </p>
 
-  <div class="card">
-    <h2>🔥 Pågfejd</h2>
-    <p>Ordspel på skånska. Lägg ord, få poäng och bråka om vad som är ett riktigt ord.</p>
-  </div>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="/pagfejd.html">🔥 Spela Pågfejd</a>
+          <a class="btn btn-secondary" href="#grejer">🚀 Se alla grejer</a>
+        </div>
 
-  <div class="card">
-    <h2>🧠 Hur skånsk är du?</h2>
-    <p>Quiz som avgör om du är en riktig påg eller bara spelar.</p>
-  </div>
+        <div class="stats">
+          <div class="stat">
+            <strong>1</strong>
+            <span>huvudspel på gång</span>
+          </div>
+          <div class="stat">
+            <strong>100%</strong>
+            <span>hjärndöd energi</span>
+          </div>
+          <div class="stat">
+            <strong>Skåne</strong>
+            <span>premium kaos</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <div class="card">
-    <h2>🎭 Karaktärer</h2>
-    <p>Möt alla sjuka figurer från BrainDead-universumet.</p>
-  </div>
+    <section class="section" id="grejer">
+      <div class="section-head">
+        <h2>Grejer att klicka på</h2>
+        <p>
+          En samling dumheter som ska kännas snygga nog att folk klickar och tillräckligt märkliga för att de stannar kvar.
+        </p>
+      </div>
 
-  <div class="card">
-    <h2>💀 Kommer snart</h2>
-    <p>Fler spel och ännu mer hjärndött innehåll är på väg.</p>
-  </div>
+      <div class="grid">
+        <a class="card featured" href="/pagfejd.html">
+          <div>
+            <div class="badge hot">🔥 Först ut</div>
+            <h3>Pågfejd</h3>
+            <p>
+              Ett ordspel på skånska där folk kan lägga ord, få poäng och börja tjafsa om vad som ens räknas som språk.
+            </p>
+          </div>
+          <div class="card-footer">
+            <div class="link-text">Spela nu</div>
+            <div class="arrow">→</div>
+          </div>
+        </a>
 
-</div>
+        <a class="card normal" href="#">
+          <div>
+            <div class="badge">🧠 Quiz</div>
+            <h3>Hur skånsk är du?</h3>
+            <p>
+              Testa om du är äkta påg eller bara råkar låta konstig ibland.
+            </p>
+          </div>
+          <div class="card-footer">
+            <div class="link-text">Kommer snart</div>
+            <div class="arrow">→</div>
+          </div>
+        </a>
 
-<div class="footer">
-© 2026 BrainDeadSE – byggt med noll hjärnceller
-</div>
+        <a class="card normal" href="#">
+          <div>
+            <div class="badge">🎭 Universum</div>
+            <h3>Karaktärer</h3>
+            <p>
+              Alla sjuka figurer och framtida legender samlade på ett ställe.
+            </p>
+          </div>
+          <div class="card-footer">
+            <div class="link-text">Utforska</div>
+            <div class="arrow">→</div>
+          </div>
+        </a>
 
+        <a class="card normal" href="#">
+          <div>
+            <div class="badge">💀 Kaos</div>
+            <h3>Kommer snart</h3>
+            <p>
+              Fler spel, fler dumheter och ännu mer märkligt skit är på väg.
+            </p>
+          </div>
+          <div class="card-footer">
+            <div class="link-text">Håll utkik</div>
+            <div class="arrow">→</div>
+          </div>
+        </a>
+
+        <a class="card normal" href="#">
+          <div>
+            <div class="badge">📱 Dela</div>
+            <h3>Skicka vidare</h3>
+            <p>
+              Perfekt när du hittar något så onödigt bra att du måste dra in en kompis också.
+            </p>
+          </div>
+          <div class="card-footer">
+            <div class="link-text">Snart här</div>
+            <div class="arrow">→</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="ticker">
+        <div class="ticker-track">
+          <span><strong>BrainDeadSE</strong> • spel • quiz • karaktärer • skånskt kaos • onödigt internet •</span>
+          <span><strong>BrainDeadSE</strong> • spel • quiz • karaktärer • skånskt kaos • onödigt internet •</span>
+          <span><strong>BrainDeadSE</strong> • spel • quiz • karaktärer • skånskt kaos • onödigt internet •</span>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      © 2026 BrainDeadSE — byggt med noll hjärnceller men alldeles för mycket ambition
+    </footer>
+  </main>
 </body>
 </html>
