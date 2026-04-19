@@ -571,7 +571,7 @@
 
     async function loadDictionary() {
       try {
-        const res = await fetch('words.txt');
+        const res = await fetch('/words.txt');
         const text = await res.text();
         DICTIONARY = new Set(
           text
