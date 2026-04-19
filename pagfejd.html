@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pågfejd</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #05060b;
+  color: white;
+  text-align: center;
+}
+
+/* HEADER */
+h1 {
+  color: #ffd400;
+  margin-top: 20px;
+}
+
+/* WORD DISPLAY */
+.word {
+  font-size: 2rem;
+  margin: 20px;
+  min-height: 40px;
+}
+
+/* LETTERS */
+.letters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 20px;
+}
+
+.letter {
+  background: #ffd400;
+  color: black;
+  padding: 15px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.letter:hover {
+  transform: scale(1.1);
+}
+
+/* BUTTONS */
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 10px;
+  background: #ffd400;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* SCORE */
+.score {
+  margin-top: 20px;
+  font-size: 1.2rem;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🔥 Pågfejd</h1>
+
+<div class="word" id="word"></div>
+
+<div class="letters" id="letters"></div>
+
+<button onclick="submitWord()">Lägg ord</button>
+<button onclick="resetWord()">Rensa</button>
+
+<div class="score">Poäng: <span id="score">0</span></div>
+
+<script>
+let currentWord = "";
+let score = 0;
+
+const letters = "abcdefghijklmnopqrstuvwxyzåäö".split("");
+
+const validWords = [
+  "påg", "tös", "mög", "rälig", "balle", "skåne"
+];
+
+function generateLetters() {
+  const container = document.getElementById("letters");
+  container.innerHTML = "";
+
+  for (let i = 0; i < 8; i++) {
+    const random = letters[Math.floor(Math.random() * letters.length)];
+
+    const div = document.createElement("div");
+    div.className = "letter";
+    div.innerText = random;
+
+    div.onclick = () => {
+      currentWord += random;
+      updateWord();
+    };
+
+    container.appendChild(div);
+  }
+}
+
+function updateWord() {
+  document.getElementById("word").innerText = currentWord;
+}
+
+function resetWord() {
+  currentWord = "";
+  updateWord();
+}
+
+function submitWord() {
+  if (validWords.includes(currentWord)) {
+    score += currentWord.length;
+    alert("🔥 Godkänt!");
+  } else {
+    alert("❌ Inte ett riktigt ord!");
+  }
+
+  document.getElementById("score").innerText = score;
+  resetWord();
+  generateLetters();
+}
+
+generateLetters();
+</script>
+
+</body>
+</html>
