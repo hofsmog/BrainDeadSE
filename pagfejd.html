@@ -1,141 +1,1073 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pågfejd</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pågfejd</title>
+  <meta name="description" content="Pågfejd – ett skånskt ordspel inspirerat av klassiska brickspel." />
+  <style>
+    :root {
+      --bg: #05060b;
+      --bg2: #0d1020;
+      --panel: rgba(14, 18, 34, 0.94);
+      --panel-2: rgba(19, 24, 44, 0.96);
+      --border: rgba(255,255,255,0.08);
+      --text: #f4f7ff;
+      --muted: #aeb6cd;
+      --yellow: #ffd400;
+      --yellow-2: #ffb800;
+      --blue: #65a8ff;
+      --pink: #ff67d8;
+      --green: #49d17d;
+      --red: #ff6b6b;
+      --shadow: 0 20px 60px rgba(0,0,0,0.45);
+      --radius: 22px;
+      --tile: #f0c95d;
+      --tile-dark: #c89828;
+      --tile-text: #2d2108;
+      --cell: #11172b;
+      --dw: #234e7f;
+      --tw: #6f2453;
+      --dl: #1f5e50;
+      --tl: #7d5818;
+      --center: #3f315c;
+    }
 
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #05060b;
-  color: white;
-  text-align: center;
-}
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255,212,0,0.10), transparent 22%),
+        radial-gradient(circle at 15% 15%, rgba(101,168,255,0.08), transparent 20%),
+        linear-gradient(180deg, #04050a 0%, #060914 45%, #04050a 100%);
+      min-height: 100vh;
+    }
 
-/* HEADER */
-h1 {
-  color: #ffd400;
-  margin-top: 20px;
-}
+    a { color: inherit; text-decoration: none; }
 
-/* WORD DISPLAY */
-.word {
-  font-size: 2rem;
-  margin: 20px;
-  min-height: 40px;
-}
+    .wrap {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 18px;
+    }
 
-/* LETTERS */
-.letters {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 20px;
-}
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
 
-.letter {
-  background: #ffd400;
-  color: black;
-  padding: 15px;
-  border-radius: 10px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.2s;
-}
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      letter-spacing: 0.3px;
+    }
 
-.letter:hover {
-  transform: scale(1.1);
-}
+    .brand img {
+      width: 54px;
+      height: auto;
+      filter: drop-shadow(0 0 14px rgba(255, 200, 0, 0.45));
+    }
 
-/* BUTTONS */
-button {
-  padding: 10px 20px;
-  margin: 10px;
-  border: none;
-  border-radius: 10px;
-  background: #ffd400;
-  font-weight: bold;
-  cursor: pointer;
-}
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-/* SCORE */
-.score {
-  margin-top: 20px;
-  font-size: 1.2rem;
-}
-</style>
+    .pill, .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 0 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--yellow), var(--yellow-2));
+      color: #141006;
+      border: none;
+      box-shadow: 0 12px 32px rgba(255, 212, 0, 0.22);
+    }
+
+    .btn:hover, .pill:hover { transform: translateY(-2px); }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(17,20,35,0.92), rgba(9,12,24,0.96));
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.04), transparent 35%),
+        radial-gradient(circle at top right, rgba(255,212,0,0.08), transparent 24%);
+      pointer-events: none;
+    }
+
+    .hero-copy {
+      padding: 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: var(--yellow);
+      background: rgba(255,212,0,0.08);
+      border: 1px solid rgba(255,212,0,0.14);
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 4rem);
+      line-height: 0.95;
+      letter-spacing: -1.6px;
+      color: var(--yellow);
+    }
+
+    .sub {
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 1.02rem;
+      max-width: 62ch;
+      margin: 16px 0 0;
+    }
+
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .stat {
+      min-width: 135px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .stat strong { color: var(--yellow); display: block; margin-bottom: 4px; }
+    .stat span { color: var(--muted); font-size: .92rem; }
+
+    .hero-side {
+      padding: 20px;
+      display: grid;
+      gap: 12px;
+      align-content: center;
+    }
+
+    .mini {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .mini h3 { margin: 0 0 8px; font-size: 1.15rem; }
+    .mini p { margin: 0; color: var(--muted); line-height: 1.55; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(320px, 880px) minmax(260px, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .game-shell {
+      padding: 18px;
+    }
+
+    .scorebar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .scorebox {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .scorebox .label {
+      color: var(--muted);
+      font-size: .82rem;
+      margin-bottom: 6px;
+    }
+
+    .scorebox strong {
+      display: block;
+      font-size: 1.35rem;
+      color: var(--yellow);
+    }
+
+    .board-wrap {
+      overflow: auto;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.03);
+      padding: 10px;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(15, 50px);
+      grid-template-rows: repeat(15, 50px);
+      gap: 4px;
+      width: max-content;
+      margin: 0 auto;
+    }
+
+    .cell {
+      position: relative;
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: var(--cell);
+      border: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      user-select: none;
+      transition: transform .15s ease, outline-color .15s ease, box-shadow .15s ease;
+      cursor: pointer;
+      color: rgba(255,255,255,0.92);
+      font-size: 1rem;
+    }
+
+    .cell small {
+      position: absolute;
+      bottom: 4px;
+      right: 6px;
+      font-size: .56rem;
+      font-weight: 800;
+      opacity: .85;
+    }
+
+    .cell.dw { background: linear-gradient(180deg, rgba(35,78,127,0.88), rgba(22,51,85,0.95)); }
+    .cell.tw { background: linear-gradient(180deg, rgba(111,36,83,0.88), rgba(72,22,53,0.95)); }
+    .cell.dl { background: linear-gradient(180deg, rgba(31,94,80,0.88), rgba(18,61,52,0.95)); }
+    .cell.tl { background: linear-gradient(180deg, rgba(125,88,24,0.88), rgba(85,57,13,0.95)); }
+    .cell.center { background: linear-gradient(180deg, rgba(63,49,92,0.94), rgba(44,33,68,0.98)); }
+    .cell.selected { outline: 2px solid rgba(255,212,0,0.8); transform: scale(1.03); box-shadow: 0 0 0 2px rgba(255,212,0,0.14); }
+    .cell.invalid { outline: 2px solid rgba(255,107,107,0.85); }
+
+    .tile {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(180deg, var(--tile), #deb24a);
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.18), 0 6px 14px rgba(0,0,0,0.18);
+      color: var(--tile-text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.3rem;
+      position: relative;
+      text-transform: uppercase;
+    }
+
+    .tile .pts {
+      position: absolute;
+      right: 5px;
+      bottom: 4px;
+      font-size: .55rem;
+      font-weight: 900;
+      opacity: .9;
+    }
+
+    .tile.placed-now { box-shadow: inset 0 -2px 0 rgba(0,0,0,0.18), 0 0 0 2px rgba(255,212,0,0.28), 0 10px 20px rgba(255,212,0,0.12); }
+
+    .rack-wrap {
+      margin-top: 14px;
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .rack-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .rack {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      min-height: 58px;
+    }
+
+    .rack .tile {
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .rack .tile:hover { transform: translateY(-2px); }
+    .rack .tile.selected { box-shadow: inset 0 -2px 0 rgba(0,0,0,0.18), 0 0 0 2px rgba(101,168,255,0.65), 0 10px 20px rgba(101,168,255,0.14); transform: translateY(-2px); }
+
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .side {
+      display: grid;
+      gap: 18px;
+    }
+
+    .side-card {
+      padding: 18px;
+    }
+
+    .side-card h3 {
+      margin: 0 0 12px;
+      font-size: 1.2rem;
+      color: var(--yellow);
+    }
+
+    .side-card p, .side-card li {
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .turn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-weight: 800;
+      background: rgba(73,209,125,0.08);
+      border: 1px solid rgba(73,209,125,0.18);
+      color: #8ceeb0;
+      margin-bottom: 12px;
+    }
+
+    .list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .list li {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .move {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .move-word {
+      font-weight: 900;
+      color: var(--text);
+    }
+
+    .move-meta {
+      color: var(--muted);
+      font-size: .88rem;
+      margin-top: 3px;
+    }
+
+    .msg {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: var(--muted);
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+    }
+
+    .msg.ok { color: #8ceeb0; border-color: rgba(73,209,125,0.18); background: rgba(73,209,125,0.06); }
+    .msg.error { color: #ffb3b3; border-color: rgba(255,107,107,0.18); background: rgba(255,107,107,0.06); }
+
+    .footer-link {
+      margin-top: 14px;
+      text-align: center;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    @media (max-width: 1180px) {
+      .hero, .layout { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 760px) {
+      .wrap { padding: 14px; }
+      .scorebar, .actions { grid-template-columns: repeat(2, 1fr); }
+      .board { grid-template-columns: repeat(15, 42px); grid-template-rows: repeat(15, 42px); }
+      .cell { width: 42px; height: 42px; border-radius: 10px; font-size: .92rem; }
+      .tile { width: 34px; height: 34px; font-size: 1.1rem; }
+    }
+  </style>
 </head>
-
 <body>
+  <main class="wrap">
+    <div class="topbar">
+      <a class="brand" href="/index.html">
+        <img src="/logo.png" alt="BrainDeadSE logo" />
+        <span>Pågfejd</span>
+      </a>
+      <div class="top-actions">
+        <button class="pill" id="newGameBtn">🔄 Ny match</button>
+        <a class="pill" href="/index.html">← Till startsidan</a>
+      </div>
+    </div>
 
-<h1>🔥 Pågfejd</h1>
+    <section class="hero">
+      <div class="panel hero-copy">
+        <div class="eyebrow">🔥 Skånsk ordfejd deluxe</div>
+        <h1>Riktigt bräde. Riktiga brickor. Riktigt onödigt tjafs.</h1>
+        <p class="sub">
+          Här får du en riktig Wordfeud-liknande första version: 15×15-bräde, bokstavsställ,
+          poängrutor, ordkontroll, turordning och en enkel datorfiende. Först bygger vi spelbart.
+          Sen gör vi det ännu sjukare.
+        </p>
+        <div class="hero-stats">
+          <div class="stat"><strong>15×15</strong><span>riktigt bräde</span></div>
+          <div class="stat"><strong>2 spelare</strong><span>du mot datorn</span></div>
+          <div class="stat"><strong>Skånsk vibe</strong><span>dum energi</span></div>
+        </div>
+      </div>
+      <div class="panel hero-side">
+        <div class="mini">
+          <h3>Hur du spelar</h3>
+          <p>Välj en bricka i ditt ställ, tryck på en ruta och bygg ett ord i en rak rad. Tryck sedan på <strong>Spela drag</strong>.</p>
+        </div>
+        <div class="mini">
+          <h3>Denna version</h3>
+          <p>Enkel ordlista, riktig poängräkning, bonusrutor, datorns tur och historik. Perfekt grund att bygga vidare på.</p>
+        </div>
+      </div>
+    </section>
 
-<div class="word" id="word"></div>
+    <section class="layout">
+      <div class="panel game-shell">
+        <div class="scorebar">
+          <div class="scorebox"><div class="label">Du</div><strong id="playerScore">0</strong></div>
+          <div class="scorebox"><div class="label">Datorn</div><strong id="aiScore">0</strong></div>
+          <div class="scorebox"><div class="label">Påsen</div><strong id="bagCount">0</strong></div>
+          <div class="scorebox"><div class="label">Ordlista</div><strong id="dictCount">0</strong></div>
+        </div>
 
-<div class="letters" id="letters"></div>
+        <div class="board-wrap">
+          <div class="board" id="board"></div>
+        </div>
 
-<button onclick="submitWord()">Lägg ord</button>
-<button onclick="resetWord()">Rensa</button>
+        <div class="rack-wrap">
+          <div class="rack-head">
+            <div class="turn" id="turnBadge">🟢 Din tur</div>
+            <div style="color: var(--muted); font-size: .95rem;">Välj bricka → välj ruta → bygg ord</div>
+          </div>
+          <div class="rack" id="rack"></div>
+          <div class="actions">
+            <button class="btn primary" id="playBtn">✅ Spela drag</button>
+            <button class="btn" id="recallBtn">↩️ Ta tillbaka</button>
+            <button class="btn" id="shuffleBtn">🔀 Blanda</button>
+            <button class="btn" id="swapBtn">♻️ Byt alla</button>
+          </div>
+          <div class="msg" id="message">Bygg ett ord som går genom mitten på första draget.</div>
+        </div>
+      </div>
 
-<div class="score">Poäng: <span id="score">0</span></div>
+      <div class="side">
+        <div class="panel side-card">
+          <h3>Senaste drag</h3>
+          <ul class="list" id="moveList"></ul>
+        </div>
 
-<script>
-let currentWord = "";
-let score = 0;
+        <div class="panel side-card">
+          <h3>Snabbregler</h3>
+          <ul class="list">
+            <li>Första ordet måste gå genom mitten.</li>
+            <li>Alla nya brickor i ett drag måste ligga på samma rad eller kolumn.</li>
+            <li>Ord måste finnas i ordlistan i denna demo.</li>
+            <li>Datorn spelar enkla drag och fyller på efter varje tur.</li>
+          </ul>
+        </div>
 
-const letters = "abcdefghijklmnopqrstuvwxyzåäö".split("");
+        <div class="panel side-card">
+          <h3>Demo-ordlista</h3>
+          <p>Vi kör med en enkel blandning av svenska och skånska ord så spelet är testbart direkt: påg, tös, mög, rälig, balle, glass, boll, hus, katt, skåne och fler.</p>
+          <div class="footer-link">Nästa steg: större ordlista, multiplayer och snyggare animationer.</div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-const validWords = [
-  "påg", "tös", "mög", "rälig", "balle", "skåne"
-];
+  <script>
+    const SIZE = 15;
+    const CENTER = 7;
+    const RACK_SIZE = 7;
 
-function generateLetters() {
-  const container = document.getElementById("letters");
-  container.innerHTML = "";
-
-  for (let i = 0; i < 8; i++) {
-    const random = letters[Math.floor(Math.random() * letters.length)];
-
-    const div = document.createElement("div");
-    div.className = "letter";
-    div.innerText = random;
-
-    div.onclick = () => {
-      currentWord += random;
-      updateWord();
+    const LETTER_POINTS = {
+      a:1,b:3,c:8,d:1,e:1,f:3,g:2,h:3,i:1,j:7,k:3,l:2,m:3,n:1,o:2,p:4,q:10,r:1,s:1,t:1,u:4,v:3,w:8,x:8,y:7,z:8,å:4,ä:4,ö:4
     };
 
-    container.appendChild(div);
-  }
-}
+    const LETTER_BAG = {
+      a:8,b:2,c:1,d:5,e:8,f:2,g:3,h:2,i:5,j:1,k:3,l:5,m:3,n:6,o:4,p:2,q:1,r:8,s:8,t:8,u:3,v:2,w:1,x:1,y:1,z:1,å:2,ä:2,ö:2
+    };
 
-function updateWord() {
-  document.getElementById("word").innerText = currentWord;
-}
+    const DICTIONARY = new Set([
+      'påg','tös','mög','rälig','balle','skåne','malmö','lund','glass','katt','hund','boll','hus','sol','sommar','vår','höst','vinter','cykel','bil','mål','lag','spel','ord','rad','kol','gul','svart','sjuk','rolig','knas','kaos','brain','dead','braindead','fejd','pågfejd','ost','bröd','öl','fika','korv','snus','grus','gris','sill','sopa','båt','hav','bro','stan','park','gata','gränd','pågar','töser','skalle','hjärna','skratta','dum','dumskalle','tok','tokig','rulle','påse','stol','bord','tak','vägg','äpple','päron','banan','potatis','päror','lök','fisk','räka','kaffe','macka','socker','salt','peppar','soppa','brygga','hamn','strand','falk','uggla','räv','björn','anka','kråka','mat','godis','fest','fredag','lördag','söndag','tisdag','onsdag','torsdag','måndag'
+    ]);
 
-function resetWord() {
-  currentWord = "";
-  updateWord();
-}
+    const BONUS = Array.from({ length: SIZE }, () => Array.from({ length: SIZE }, () => ''));
+    const setBonus = (coords, type) => coords.forEach(([r, c]) => BONUS[r][c] = type);
 
-function submitWord() {
-  if (validWords.includes(currentWord)) {
-    score += currentWord.length;
-    alert("🔥 Godkänt!");
-  } else {
-    alert("❌ Inte ett riktigt ord!");
-  }
+    setBonus([[0,0],[0,7],[0,14],[7,0],[7,14],[14,0],[14,7],[14,14]], 'tw');
+    setBonus([[1,1],[2,2],[3,3],[4,4],[10,10],[11,11],[12,12],[13,13],[1,13],[2,12],[3,11],[4,10],[10,4],[11,3],[12,2],[13,1]], 'dw');
+    setBonus([[0,3],[0,11],[2,6],[2,8],[3,0],[3,7],[3,14],[6,2],[6,6],[6,8],[6,12],[7,3],[7,11],[8,2],[8,6],[8,8],[8,12],[11,0],[11,7],[11,14],[12,6],[12,8],[14,3],[14,11]], 'dl');
+    setBonus([[1,5],[1,9],[5,1],[5,5],[5,9],[5,13],[9,1],[9,5],[9,9],[9,13],[13,5],[13,9]], 'tl');
+    BONUS[CENTER][CENTER] = 'center';
 
-  document.getElementById("score").innerText = score;
-  resetWord();
-  generateLetters();
-}
+    let board = [];
+    let bag = [];
+    let playerRack = [];
+    let aiRack = [];
+    let selectedRackIndex = null;
+    let placedThisTurn = [];
+    let playerScore = 0;
+    let aiScore = 0;
+    let firstMove = true;
+    let turn = 'player';
+    let moveHistory = [];
 
-generateLetters();
-</script>
+    const boardEl = document.getElementById('board');
+    const rackEl = document.getElementById('rack');
+    const messageEl = document.getElementById('message');
+    const moveListEl = document.getElementById('moveList');
+    const playerScoreEl = document.getElementById('playerScore');
+    const aiScoreEl = document.getElementById('aiScore');
+    const bagCountEl = document.getElementById('bagCount');
+    const dictCountEl = document.getElementById('dictCount');
+    const turnBadgeEl = document.getElementById('turnBadge');
 
+    dictCountEl.textContent = DICTIONARY.size;
+
+    function setMessage(text, type = '') {
+      messageEl.textContent = text;
+      messageEl.className = 'msg' + (type ? ' ' + type : '');
+    }
+
+    function makeBag() {
+      const arr = [];
+      for (const [letter, count] of Object.entries(LETTER_BAG)) {
+        for (let i = 0; i < count; i++) arr.push(letter);
+      }
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function drawTiles(targetRack, amount) {
+      for (let i = 0; i < amount && bag.length; i++) {
+        targetRack.push(bag.pop());
+      }
+    }
+
+    function createEmptyBoard() {
+      return Array.from({ length: SIZE }, () => Array.from({ length: SIZE }, () => null));
+    }
+
+    function getTileHTML(letter, extraClass = '') {
+      const pts = LETTER_POINTS[letter] || 0;
+      return `<div class="tile ${extraClass}">${letter.toUpperCase()}<span class="pts">${pts}</span></div>`;
+    }
+
+    function renderBoard() {
+      boardEl.innerHTML = '';
+      for (let r = 0; r < SIZE; r++) {
+        for (let c = 0; c < SIZE; c++) {
+          const cell = document.createElement('div');
+          const bonus = BONUS[r][c];
+          cell.className = 'cell' + (bonus ? ' ' + bonus : '');
+          cell.dataset.row = r;
+          cell.dataset.col = c;
+
+          const placedNow = placedThisTurn.find(t => t.row === r && t.col === c);
+          const tile = board[r][c];
+          if (tile) {
+            cell.innerHTML = getTileHTML(tile, placedNow ? 'placed-now' : '');
+          } else if (!tile && bonus) {
+            const labelMap = { dw: '2W', tw: '3W', dl: '2L', tl: '3L', center: '★' };
+            cell.innerHTML = `<small>${labelMap[bonus]}</small>`;
+          }
+
+          cell.addEventListener('click', () => onCellClick(r, c));
+          boardEl.appendChild(cell);
+        }
+      }
+    }
+
+    function renderRack() {
+      rackEl.innerHTML = '';
+      playerRack.forEach((letter, idx) => {
+        const holder = document.createElement('div');
+        holder.innerHTML = getTileHTML(letter, idx === selectedRackIndex ? 'selected' : '');
+        const tile = holder.firstElementChild;
+        tile.addEventListener('click', () => {
+          if (turn !== 'player') return;
+          selectedRackIndex = idx === selectedRackIndex ? null : idx;
+          renderRack();
+          setMessage(selectedRackIndex === null ? 'Bricka avmarkerad.' : `Vald bricka: ${letter.toUpperCase()}. Tryck på en tom ruta.`, '');
+        });
+        rackEl.appendChild(tile);
+      });
+    }
+
+    function updateTop() {
+      playerScoreEl.textContent = playerScore;
+      aiScoreEl.textContent = aiScore;
+      bagCountEl.textContent = bag.length;
+      turnBadgeEl.textContent = turn === 'player' ? '🟢 Din tur' : '🤖 Datorns tur';
+      turnBadgeEl.style.background = turn === 'player' ? 'rgba(73,209,125,0.08)' : 'rgba(101,168,255,0.08)';
+      turnBadgeEl.style.borderColor = turn === 'player' ? 'rgba(73,209,125,0.18)' : 'rgba(101,168,255,0.18)';
+      turnBadgeEl.style.color = turn === 'player' ? '#8ceeb0' : '#9bc6ff';
+    }
+
+    function addMoveHistory(player, word, points) {
+      moveHistory.unshift({ player, word, points });
+      moveHistory = moveHistory.slice(0, 8);
+      renderHistory();
+    }
+
+    function renderHistory() {
+      moveListEl.innerHTML = '';
+      if (!moveHistory.length) {
+        moveListEl.innerHTML = '<li>Inga drag ännu. Lägg första ordet över mitten.</li>';
+        return;
+      }
+      moveHistory.forEach(move => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <div class="move">
+            <div>
+              <div class="move-word">${move.player}: ${move.word.toUpperCase()}</div>
+              <div class="move-meta">+${move.points} poäng</div>
+            </div>
+            <div>${move.player === 'Du' ? '🔥' : '🤖'}</div>
+          </div>
+        `;
+        moveListEl.appendChild(li);
+      });
+    }
+
+    function onCellClick(row, col) {
+      if (turn !== 'player') return;
+      if (selectedRackIndex === null) {
+        const placedIndex = placedThisTurn.findIndex(t => t.row === row && t.col === col);
+        if (placedIndex !== -1) {
+          const [{ letter, rackIndex }] = placedThisTurn.splice(placedIndex, 1);
+          playerRack[rackIndex] = letter;
+          board[row][col] = null;
+          setMessage(`Tog tillbaka ${letter.toUpperCase()} från brädet.`);
+          renderAll();
+        }
+        return;
+      }
+      if (board[row][col]) {
+        setMessage('Den rutan är redan upptagen, din galning.', 'error');
+        return;
+      }
+      const letter = playerRack[selectedRackIndex];
+      board[row][col] = letter;
+      placedThisTurn.push({ row, col, letter, rackIndex: selectedRackIndex });
+      playerRack[selectedRackIndex] = null;
+      selectedRackIndex = null;
+      compressRackNulls();
+      renderAll();
+      setMessage('Bricka placerad. Lägg fler i samma rad eller kolumn, eller spela draget.');
+    }
+
+    function compressRackNulls() {
+      playerRack = playerRack.filter(Boolean);
+    }
+
+    function recallTiles() {
+      placedThisTurn.forEach(tile => {
+        board[tile.row][tile.col] = null;
+        playerRack.push(tile.letter);
+      });
+      placedThisTurn = [];
+      selectedRackIndex = null;
+      renderAll();
+      setMessage('Alla brickor togs tillbaka. Andas nu.');
+    }
+
+    function shuffleRack() {
+      for (let i = playerRack.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [playerRack[i], playerRack[j]] = [playerRack[j], playerRack[i]];
+      }
+      renderRack();
+      setMessage('Stället blandades. Nu blev det kanske ännu värre.');
+    }
+
+    function swapAllTiles() {
+      if (turn !== 'player') return;
+      if (placedThisTurn.length) {
+        setMessage('Ta tillbaka brickorna från brädet innan du byter.', 'error');
+        return;
+      }
+      if (bag.length < playerRack.length) {
+        setMessage('För få brickor kvar i påsen för att byta alla.', 'error');
+        return;
+      }
+      bag.push(...playerRack);
+      playerRack = [];
+      for (let i = bag.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [bag[i], bag[j]] = [bag[j], bag[i]];
+      }
+      drawTiles(playerRack, RACK_SIZE);
+      endPlayerTurn('Du bytte alla brickor istället för att spela.');
+    }
+
+    function getMainWordFromPlacements(placements) {
+      if (!placements.length) return null;
+      const sameRow = placements.every(p => p.row === placements[0].row);
+      const sameCol = placements.every(p => p.col === placements[0].col);
+      if (!sameRow && !sameCol) return { error: 'Alla nya brickor måste ligga på samma rad eller kolumn.' };
+
+      const horizontal = sameRow;
+      let row = placements[0].row;
+      let col = placements[0].col;
+
+      if (horizontal) {
+        const cols = placements.map(p => p.col);
+        let min = Math.min(...cols);
+        while (min > 0 && board[row][min - 1]) min--;
+        let letters = '';
+        let coords = [];
+        let c = min;
+        while (c < SIZE && board[row][c]) {
+          letters += board[row][c];
+          coords.push([row, c]);
+          c++;
+        }
+        return { word: letters, coords, horizontal: true };
+      }
+
+      const rows = placements.map(p => p.row);
+      let min = Math.min(...rows);
+      while (min > 0 && board[min - 1][col]) min--;
+      let letters = '';
+      let coords = [];
+      let r = min;
+      while (r < SIZE && board[r][col]) {
+        letters += board[r][col];
+        coords.push([r, col]);
+        r++;
+      }
+      return { word: letters, coords, horizontal: false };
+    }
+
+    function getCrossWord(row, col, horizontal) {
+      if (horizontal) {
+        let start = row;
+        while (start > 0 && board[start - 1][col]) start--;
+        let word = '';
+        let coords = [];
+        let r = start;
+        while (r < SIZE && board[r][col]) {
+          word += board[r][col];
+          coords.push([r, col]);
+          r++;
+        }
+        return { word, coords };
+      } else {
+        let start = col;
+        while (start > 0 && board[row][start - 1]) start--;
+        let word = '';
+        let coords = [];
+        let c = start;
+        while (c < SIZE && board[row][c]) {
+          word += board[row][c];
+          coords.push([row, c]);
+          c++;
+        }
+        return { word, coords };
+      }
+    }
+
+    function isConnectedToExisting(placements) {
+      if (firstMove) {
+        return placements.some(p => p.row === CENTER && p.col === CENTER);
+      }
+      return placements.some(({ row, col }) => {
+        const dirs = [[1,0],[-1,0],[0,1],[0,-1]];
+        return dirs.some(([dr, dc]) => {
+          const nr = row + dr, nc = col + dc;
+          if (nr < 0 || nr >= SIZE || nc < 0 || nc >= SIZE) return false;
+          return board[nr][nc] && !placedThisTurn.some(t => t.row === nr && t.col === nc);
+        });
+      });
+    }
+
+    function validateAndScoreCurrentMove() {
+      if (!placedThisTurn.length) return { error: 'Lägg ut minst en bricka först.' };
+      const main = getMainWordFromPlacements(placedThisTurn);
+      if (main.error) return { error: main.error };
+      if (!isConnectedToExisting(placedThisTurn)) {
+        return { error: firstMove ? 'Första ordet måste gå genom mitten.' : 'Draget måste kopplas till befintliga brickor.' };
+      }
+      if (main.word.length < 2) return { error: 'Ordet måste vara minst 2 bokstäver långt.' };
+
+      const newSet = new Set(placedThisTurn.map(t => `${t.row},${t.col}`));
+      const words = [main];
+      for (const p of placedThisTurn) {
+        const cross = getCrossWord(p.row, p.col, main.horizontal);
+        if (cross.word.length > 1) words.push(cross);
+      }
+
+      for (const item of words) {
+        if (!DICTIONARY.has(item.word.toLowerCase())) {
+          return { error: `Ordet "${item.word}" finns inte i demo-ordlistan.` };
+        }
+      }
+
+      let total = 0;
+      for (let i = 0; i < words.length; i++) {
+        const item = words[i];
+        let wordScore = 0;
+        let wordMul = 1;
+        item.coords.forEach(([r, c]) => {
+          const letter = board[r][c];
+          let pts = LETTER_POINTS[letter] || 0;
+          const isNew = newSet.has(`${r},${c}`);
+          if (isNew) {
+            const bonus = BONUS[r][c];
+            if (bonus === 'dl') pts *= 2;
+            if (bonus === 'tl') pts *= 3;
+            if (bonus === 'dw' || bonus === 'center') wordMul *= 2;
+            if (bonus === 'tw') wordMul *= 3;
+          }
+          wordScore += pts;
+        });
+        total += wordScore * wordMul;
+      }
+
+      if (placedThisTurn.length === 7) total += 40;
+      return { total, mainWord: main.word.toLowerCase() };
+    }
+
+    function finalizePlayerMove() {
+      if (turn !== 'player') return;
+      const result = validateAndScoreCurrentMove();
+      if (result.error) {
+        setMessage(result.error, 'error');
+        return;
+      }
+      playerScore += result.total;
+      addMoveHistory('Du', result.mainWord, result.total);
+      firstMove = false;
+      placedThisTurn = [];
+      drawTiles(playerRack, RACK_SIZE - playerRack.length);
+      endPlayerTurn(`Snyggt. Du la "${result.mainWord}" och fick ${result.total} poäng.`, 'ok');
+    }
+
+    function endPlayerTurn(msg, type='') {
+      selectedRackIndex = null;
+      turn = 'ai';
+      renderAll();
+      setMessage(msg, type);
+      setTimeout(aiTurn, 800);
+    }
+
+    function getExistingAnchors() {
+      const anchors = [];
+      for (let r = 0; r < SIZE; r++) {
+        for (let c = 0; c < SIZE; c++) {
+          if (board[r][c]) anchors.push([r, c]);
+        }
+      }
+      return anchors;
+    }
+
+    function canPlaceWord(word, row, col, horizontal, rackLetters) {
+      const placements = [];
+      const rackCopy = [...rackLetters];
+      for (let i = 0; i < word.length; i++) {
+        const r = row + (horizontal ? 0 : i);
+        const c = col + (horizontal ? i : 0);
+        if (r < 0 || c < 0 || r >= SIZE || c >= SIZE) return null;
+        const existing = board[r][c];
+        const ch = word[i];
+        if (existing) {
+          if (existing !== ch) return null;
+        } else {
+          const idx = rackCopy.indexOf(ch);
+          if (idx === -1) return null;
+          rackCopy.splice(idx, 1);
+          placements.push({ row: r, col: c, letter: ch });
+        }
+      }
+      if (!placements.length) return null;
+      return placements;
+    }
+
+    function applyTemporaryPlacements(placements) {
+      placements.forEach(p => { board[p.row][p.col] = p.letter; });
+    }
+
+    function removeTemporaryPlacements(placements) {
+      placements.forEach(p => { board[p.row][p.col] = null; });
+    }
+
+    function validatePlacementSet(placements) {
+      const oldPlaced = placedThisTurn;
+      placedThisTurn = placements.map((p, i) => ({ ...p, rackIndex: i }));
+      const result = validateAndScoreCurrentMove();
+      placedThisTurn = oldPlaced;
+      return result;
+    }
+
+    function aiTurn() {
+      let best = null;
+      const words = [...DICTIONARY].filter(w => w.length >= 2 && w.length <= 7);
+
+      for (const word of words) {
+        for (let r = 0; r < SIZE; r++) {
+          for (let c = 0; c < SIZE; c++) {
+            for (const horizontal of [true, false]) {
+              const placements = canPlaceWord(word, r, c, horizontal, aiRack);
+              if (!placements) continue;
+              applyTemporaryPlacements(placements);
+              const scored = validatePlacementSet(placements);
+              removeTemporaryPlacements(placements);
+              if (scored.error) continue;
+              if (!best || scored.total > best.score) {
+                best = { word, placements, score: scored.total };
+              }
+            }
+          }
+        }
+      }
+
+      if (!best) {
+        if (bag.length && aiRack.length) {
+          bag.push(...aiRack.splice(0, Math.min(2, aiRack.length)));
+          for (let i = bag.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [bag[i], bag[j]] = [bag[j], bag[i]];
+          }
+          drawTiles(aiRack, RACK_SIZE - aiRack.length);
+        }
+        turn = 'player';
+        renderAll();
+        setMessage('Datorn hittade inget vettigt drag och fumlade istället med sitt ställ.', '');
+        return;
+      }
+
+      applyTemporaryPlacements(best.placements);
+      aiScore += best.score;
+      addMoveHistory('Datorn', best.word, best.score);
+      firstMove = false;
+      best.placements.forEach(p => {
+        const idx = aiRack.indexOf(p.letter);
+        if (idx !== -1) aiRack.splice(idx, 1);
+      });
+      drawTiles(aiRack, RACK_SIZE - aiRack.length);
+      turn = 'player';
+      renderAll();
+      setMessage(`Datorn la "${best.word}" och tog ${best.score} poäng. Nu är det din tur igen.`, 'ok');
+    }
+
+    function startNewGame() {
+      board = createEmptyBoard();
+      bag = makeBag();
+      playerRack = [];
+      aiRack = [];
+      placedThisTurn = [];
+      selectedRackIndex = null;
+      playerScore = 0;
+      aiScore = 0;
+      firstMove = true;
+      turn = 'player';
+      moveHistory = [];
+      drawTiles(playerRack, RACK_SIZE);
+      drawTiles(aiRack, RACK_SIZE);
+      renderAll();
+      renderHistory();
+      setMessage('Ny match startad. Lägg första ordet genom mitten.', '');
+    }
+
+    function renderAll() {
+      renderBoard();
+      renderRack();
+      updateTop();
+      renderHistory();
+    }
+
+    document.getElementById('playBtn').addEventListener('click', finalizePlayerMove);
+    document.getElementById('recallBtn').addEventListener('click', recallTiles);
+    document.getElementById('shuffleBtn').addEventListener('click', shuffleRack);
+    document.getElementById('swapBtn').addEventListener('click', swapAllTiles);
+    document.getElementById('newGameBtn').addEventListener('click', startNewGame);
+
+    startNewGame();
+  </script>
 </body>
 </html>
