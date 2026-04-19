@@ -1,114 +1,792 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BrainDeadSE – Spel, Kaos & Trams</title>
-<meta name="description" content="BrainDeadSE – spel, quiz och totalt hjärndött kaos. Testa Pågfejd och andra sjuka idéer.">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BrainDeadSE – Spel, kaos & totalt meningslöst trams</title>
+  <meta
+    name="description"
+    content="BrainDeadSE – Sveriges sjukaste hörna för spel, quiz, karaktärer och totalt hjärndött internetkaos."
+  />
+  <meta name="theme-color" content="#07070b" />
 
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
+  <style>
+    :root {
+      --bg: #07070b;
+      --bg-2: #0e1020;
+      --card: rgba(18, 20, 36, 0.78);
+      --card-2: rgba(24, 27, 48, 0.92);
+      --text: #f5f7ff;
+      --muted: #adb3c7;
+      --yellow: #ffd400;
+      --yellow-2: #ffb800;
+      --pink: #ff4fd8;
+      --blue: #5ea7ff;
+      --purple: #8a63ff;
+      --border: rgba(255,255,255,0.08);
+      --shadow: 0 18px 60px rgba(0,0,0,0.45);
+      --radius: 24px;
+      --max: 1280px;
+    }
 
-body {
-  background: #0a0a0f;
-  color: #fff;
-  padding: 20px;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-h1 {
-  font-size: 2.5rem;
-  color: #ffcc00;
-}
+    body {
+      margin: 0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255, 212, 0, 0.12), transparent 25%),
+        radial-gradient(circle at 80% 15%, rgba(138, 99, 255, 0.12), transparent 22%),
+        radial-gradient(circle at 50% 80%, rgba(94, 167, 255, 0.10), transparent 28%),
+        linear-gradient(180deg, #05060b 0%, #090b14 45%, #05060b 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-p.subtitle {
-  color: #aaa;
-  margin-top: 10px;
-}
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-}
+    .bg-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.35;
+      pointer-events: none;
+      z-index: 0;
+      animation: floatOrb 10s ease-in-out infinite;
+    }
 
-.card {
-  background: #15151f;
-  border-radius: 15px;
-  padding: 20px;
-  transition: 0.2s;
-  cursor: pointer;
-  text-decoration: none;
-  color: white;
-}
+    .orb-1 {
+      width: 260px;
+      height: 260px;
+      background: rgba(255, 212, 0, 0.16);
+      top: 30px;
+      left: -50px;
+    }
 
-.card:hover {
-  transform: translateY(-5px);
-  background: #1d1d2b;
-}
+    .orb-2 {
+      width: 300px;
+      height: 300px;
+      background: rgba(138, 99, 255, 0.16);
+      top: 120px;
+      right: -80px;
+      animation-delay: -2s;
+    }
 
-.card h2 {
-  margin-bottom: 10px;
-  color: #ffcc00;
-}
+    .orb-3 {
+      width: 220px;
+      height: 220px;
+      background: rgba(255, 79, 216, 0.14);
+      bottom: 40px;
+      left: 10%;
+      animation-delay: -4s;
+    }
 
-.card p {
-  color: #bbb;
-  font-size: 0.9rem;
-}
+    @keyframes floatOrb {
+      0%, 100% { transform: translateY(0px) translateX(0px); }
+      50% { transform: translateY(-16px) translateX(10px); }
+    }
 
-.footer {
-  margin-top: 50px;
-  text-align: center;
-  color: #666;
-  font-size: 0.8rem;
-}
-</style>
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 24px 18px 60px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      letter-spacing: 0.3px;
+    }
+
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 1.25rem;
+      background: linear-gradient(135deg, rgba(255,212,0,0.18), rgba(255,184,0,0.08));
+      border: 1px solid rgba(255,212,0,0.25);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    .brand-name {
+      font-size: 1.1rem;
+      color: var(--text);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #111;
+      background: linear-gradient(135deg, var(--yellow), var(--yellow-2));
+      font-weight: 800;
+      padding: 10px 14px;
+      border-radius: 999px;
+      box-shadow: 0 10px 30px rgba(255, 212, 0, 0.2);
+      white-space: nowrap;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
+      align-items: stretch;
+      margin-bottom: 28px;
+    }
+
+    .hero-main,
+    .hero-side {
+      position: relative;
+      background: linear-gradient(180deg, rgba(17, 20, 35, 0.9), rgba(10, 12, 22, 0.92));
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-main {
+      padding: 36px;
+      min-height: 360px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .hero-main::before,
+    .hero-side::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.05), transparent 30%),
+        radial-gradient(circle at top right, rgba(255, 212, 0, 0.10), transparent 22%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      color: var(--yellow);
+      background: rgba(255, 212, 0, 0.08);
+      border: 1px solid rgba(255, 212, 0, 0.16);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 5vw, 4.9rem);
+      line-height: 0.94;
+      letter-spacing: -1.8px;
+      font-weight: 1000;
+      max-width: 10ch;
+    }
+
+    .brain {
+      background: linear-gradient(135deg, #fff 0%, #ffe66d 38%, #ffd400 60%, #ffb800 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-text {
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.65;
+      max-width: 58ch;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 52px;
+      padding: 0 18px;
+      border-radius: 16px;
+      font-weight: 900;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+      border: 1px solid transparent;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      color: #111;
+      background: linear-gradient(135deg, var(--yellow), var(--yellow-2));
+      box-shadow: 0 14px 34px rgba(255, 212, 0, 0.18);
+    }
+
+    .btn-secondary {
+      color: var(--text);
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(255,255,255,0.08);
+    }
+
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .stat {
+      min-width: 120px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      backdrop-filter: blur(8px);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.2rem;
+      color: var(--yellow);
+      margin-bottom: 4px;
+    }
+
+    .stat span {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .hero-side {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      justify-content: center;
+    }
+
+    .mini-card {
+      position: relative;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 22px;
+      padding: 18px;
+      overflow: hidden;
+    }
+
+    .mini-card.popular {
+      background:
+        linear-gradient(135deg, rgba(255,212,0,0.09), rgba(255,184,0,0.03)),
+        rgba(255,255,255,0.04);
+      border-color: rgba(255, 212, 0, 0.22);
+      box-shadow: 0 10px 30px rgba(255, 212, 0, 0.08);
+    }
+
+    .mini-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .mini-label {
+      font-size: 0.78rem;
+      font-weight: 900;
+      color: #111;
+      background: linear-gradient(135deg, var(--yellow), var(--yellow-2));
+      padding: 8px 10px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mini-icon {
+      font-size: 1.8rem;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.4rem;
+      color: var(--text);
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.97rem;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin: 34px 0 16px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(1.5rem, 2.2vw, 2.2rem);
+      letter-spacing: -0.7px;
+    }
+
+    .section-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      max-width: 52ch;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(17, 20, 35, 0.88), rgba(10, 12, 22, 0.94));
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.04), transparent 35%),
+        radial-gradient(circle at top right, rgba(94, 167, 255, 0.10), transparent 26%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .card:hover {
+      transform: translateY(-8px) scale(1.015);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.52);
+      border-color: rgba(255,255,255,0.14);
+    }
+
+    .card-lg {
+      grid-column: span 6;
+      min-height: 280px;
+      border-color: rgba(255, 212, 0, 0.18);
+      background:
+        linear-gradient(180deg, rgba(26, 21, 7, 0.35), rgba(10, 12, 22, 0.92)),
+        linear-gradient(180deg, rgba(17, 20, 35, 0.9), rgba(10, 12, 22, 0.95));
+    }
+
+    .card-md {
+      grid-column: span 3;
+    }
+
+    .card-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 900;
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 14px;
+    }
+
+    .card-badge.hot {
+      background: rgba(255, 212, 0, 0.1);
+      color: var(--yellow);
+      border-color: rgba(255, 212, 0, 0.18);
+    }
+
+    .card-badge.pink {
+      background: rgba(255, 79, 216, 0.10);
+      color: #ff87e8;
+      border-color: rgba(255, 79, 216, 0.18);
+    }
+
+    .card-badge.blue {
+      background: rgba(94, 167, 255, 0.10);
+      color: #9bc6ff;
+      border-color: rgba(94, 167, 255, 0.18);
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: clamp(1.35rem, 2vw, 2rem);
+      letter-spacing: -0.7px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 1rem;
+      max-width: 42ch;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      color: var(--text);
+    }
+
+    .arrow {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+
+    .card:hover .arrow {
+      transform: translateX(4px);
+      background: rgba(255,255,255,0.1);
+    }
+
+    .ticker {
+      margin-top: 20px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    .ticker-track {
+      display: flex;
+      gap: 36px;
+      white-space: nowrap;
+      padding: 14px 18px;
+      color: var(--muted);
+      animation: tickerMove 22s linear infinite;
+      min-width: max-content;
+    }
+
+    .ticker-track span strong {
+      color: var(--yellow);
+    }
+
+    @keyframes tickerMove {
+      from { transform: translateX(0); }
+      to { transform: translateX(-33%); }
+    }
+
+    .footer {
+      margin-top: 34px;
+      padding-top: 26px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      color: #8b92a8;
+      font-size: 0.94rem;
+    }
+
+    .footer strong {
+      color: var(--text);
+    }
+
+    @media (max-width: 1100px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .card-lg,
+      .card-md {
+        grid-column: span 6;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .wrap {
+        padding: 16px 14px 42px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .hero-main {
+        padding: 24px 20px;
+        min-height: auto;
+      }
+
+      .hero-side {
+        padding: 14px;
+      }
+
+      h1 {
+        max-width: 100%;
+      }
+
+      .hero-text {
+        font-size: 1rem;
+      }
+
+      .stats {
+        gap: 10px;
+      }
+
+      .stat {
+        flex: 1 1 calc(50% - 10px);
+        min-width: 0;
+      }
+
+      .section-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card-lg,
+      .card-md {
+        grid-column: span 1;
+      }
+
+      .card {
+        min-height: 200px;
+      }
+
+      .footer {
+        flex-direction: column;
+      }
+
+      .ticker-track {
+        gap: 24px;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
 
-<header>
-  <h1>BrainDeadSE</h1>
-  <p class="subtitle">Spel, kaos & totalt meningslöst trams 🤝</p>
-</header>
+  <main class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="brand-badge">🧠</div>
+        <div class="brand-name">BrainDeadSE</div>
+      </div>
+      <div class="pill">🔥 Noll hjärnceller. Max underhållning.</div>
+    </div>
 
-<div class="grid">
+    <section class="hero">
+      <div class="hero-main">
+        <div class="eyebrow">⚡ Svenskt internetkaos på steroider</div>
+        <h1>
+          Sveriges mest
+          <span class="brain">hjärndöda</span>
+          spelhörna
+        </h1>
+        <p class="hero-text">
+          Här bor spel, quiz, skumma idéer, märkliga figurer och totalt meningslöst trams.
+          Perfekt för folk som gillar att klicka in på något dumt och stanna alldeles för länge.
+        </p>
 
-  <a class="card" href="/pagfejd.html">
-    <h2>🔥 Pågfejd</h2>
-    <p>Ordspel på skånska. Lägg ord, få poäng och bråka om vad som är ett riktigt ord.</p>
-  </a>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="/pagfejd.html">🔥 Spela Pågfejd</a>
+          <a class="btn btn-secondary" href="#grejer">🚀 Se alla grejer</a>
+        </div>
 
-  <a class="card" href="#">
-    <h2>🧠 Hur skånsk är du?</h2>
-    <p>Quiz som avgör om du är en riktig påg eller bara spelar.</p>
-  </a>
+        <div class="stats">
+          <div class="stat">
+            <strong>1</strong>
+            <span>aktiv idé</span>
+          </div>
+          <div class="stat">
+            <strong>99%</strong>
+            <span>idiotisk energi</span>
+          </div>
+          <div class="stat">
+            <strong>Skåne</strong>
+            <span>premium kaos</span>
+          </div>
+        </div>
+      </div>
 
-  <a class="card" href="#">
-    <h2>🎭 Karaktärer</h2>
-    <p>Möt alla sjuka figurer från BrainDead-universumet.</p>
-  </a>
+      <div class="hero-side">
+        <a class="mini-card popular" href="/pagfejd.html">
+          <div class="mini-top">
+            <div class="mini-label">🔥 Huvudgrejen</div>
+            <div class="mini-icon">🟨</div>
+          </div>
+          <h3>Pågfejd</h3>
+          <p>
+            Ett ordspel på skånska där folk kan lägga ord, få poäng och börja tjafsa om
+            vad som ens räknas som svenska.
+          </p>
+        </a>
 
-  <a class="card" href="#">
-    <h2>💀 Kommer snart</h2>
-    <p>Fler spel och ännu mer hjärndött innehåll är på väg.</p>
-  </a>
+        <div class="mini-card">
+          <div class="mini-top">
+            <div class="mini-label" style="background:rgba(94,167,255,0.14);color:#9bc6ff;border:1px solid rgba(94,167,255,0.18);">🧪 Nästa kaos</div>
+            <div class="mini-icon">💀</div>
+          </div>
+          <h3>Fler dumheter på väg</h3>
+          <p>
+            Quiz, karaktärer, småspel och annat märkligt skit som ingen bad om men som ändå kommer.
+          </p>
+        </div>
+      </div>
+    </section>
 
-</div>
+    <section id="grejer">
+      <div class="section-head">
+        <div>
+          <h2>Grejer att klicka på</h2>
+          <p>Inte mycket vett. Men desto mer stil, humor och onödigt beroendeframkallande dumheter.</p>
+        </div>
+      </div>
 
-<div class="footer">
-  © 2026 BrainDeadSE – byggt med noll hjärnceller
-</div>
+      <div class="grid">
+        <a class="card card-lg" href="/pagfejd.html">
+          <div>
+            <div class="card-badge hot">🔥 Populär först</div>
+            <h3>Pågfejd</h3>
+            <p>
+              Skånskt ordkrig med poäng, prestige och risk för total språklig härdsmälta.
+              Detta ska vara första stora grejen folk går in på och tänker: vad fan är detta?
+            </p>
+          </div>
+          <div class="card-footer">
+            <div class="card-link">Spela nu</div>
+            <div class="arrow">→</div>
+          </div>
+        </a>
 
+        <a class="card card-md" href="#">
+          <div>
+            <div class="card-badge pink">🧠 Quiz</div>
+            <h3>Hur skånsk är du?</h3>
+            <p>
+              Ett quiz som avgör om du är äkta påg eller bara en förvirrad turist med dialektpanik.
+            </p>
+          </div>
+          <div class="card-footer">
+            <div class="card-link">Kommer snart</div>
+            <div class="arrow">→</div>
+          </div>
+        </a>
+
+        <a class="card card-md" href="#">
+          <div>
+            <div class="card-badge blue">🎭 Universum</div>
+            <h3>Karaktärer</h3>
+            <p>
+              Alla märkliga figurer, konstiga påhitt och framtida legender samlade på ett ställe.
+            </p>
+          </div>
+          <div class="card-footer">
+            <div class="card-link">Utforska</div>
+            <div class="arrow">→</div>
+          </div>
+        </a>
+
+        <a class="card card-md" href="#">
+          <div>
+            <div class="card-badge">💀 Kaos</div>
+            <h3>Kommer snart</h3>
+            <p>
+              Mer skit. Mer spel. Mer sånt som får folk att skratta och undra varför sidan ens finns.
+            </p>
+          </div>
+          <div class="card-footer">
+            <div class="card-link">Håll utkik</div>
+            <div class="arrow">→</div>
+          </div>
+        </a>
+
+        <a class="card card-md" href="#">
+          <div>
+            <div class="card-badge">📱 Viral idé</div>
+            <h3>Dela med en vän</h3>
+            <p>
+              Perfekt när du hittar något så onödigt bra att du måste skicka det vidare direkt.
+            </p>
+          </div>
+          <div class="card-footer">
+            <div class="card-link">Dela snart</div>
+            <div class="arrow">→</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="ticker">
+        <div class="ticker-track">
+          <span><strong>BrainDeadSE</strong> • spel • quiz • karaktärer • skånskt kaos • ordbråk • totalt onödigt •</span>
+          <span><strong>BrainDeadSE</strong> • spel • quiz • karaktärer • skånskt kaos • ordbråk • totalt onödigt •</span>
+          <span><strong>BrainDeadSE</strong> • spel • quiz • karaktärer • skånskt kaos • ordbråk • totalt onödigt •</span>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div>© 2026 <strong>BrainDeadSE</strong> — byggt med noll hjärnceller</div>
+      <div>Skapat för folk som gillar dumma idéer med alldeles för hög kvalitet</div>
+    </footer>
+  </main>
 </body>
 </html>
