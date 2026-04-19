@@ -570,28 +570,33 @@
     let DICTIONARY = new Set();
 
     async function loadDictionary() {
-      try {
-        const res = await fetch('/words.txt');
-        const text = await res.text();
-        DICTIONARY = new Set(
-          text
-            .split(/\r?\n/)
-            .map(w => w.trim().toLowerCase())
-            .filter(w => w.length > 1 && !w.startsWith('#') && !w.startsWith('*'))
-        );
+  try {
+    const res = await fetch('words.txt');
+    const text = await res.text();
 
-        ['påg','tös','mög','rälig','balle','klydd','päror','hialös','fubbick','rullebör'].forEach(word => {
-          DICTIONARY.add(word);
-        });
+    DICTIONARY = new Set(
+      text
+        .split(/\r?\n/)
+        .map(w => w.trim().toLowerCase())
+        .filter(w => w.length > 1 && !w.startsWith('#') && !w.startsWith('*'))
+    );
 
-        
-      } catch (err) {
-        console.error('Kunde inte ladda words.txt', err);
-        DICTIONARY = new Set(['påg','tös','mög','rälig','balle','skåne','malmö','lund','glass','katt','hund','boll','hus','sol','ord','spel']);
-        dictCountEl.textContent = DICTIONARY.size;
-        setMessage('words.txt kunde inte laddas. Jag kör en liten reservordlista tills vidare.', 'error');
-      }
-    }
+    ['påg','tös','mög','rälig','balle','klydd','päror','hialös','fubbick','rullebör'].forEach(word => {
+      DICTIONARY.add(word);
+    });
+
+    dictCountEl.textContent = DICTIONARY.size;
+    console.log('🔥 Ord laddade:', DICTIONARY.size);
+
+  } catch (err) {
+    console.error('Kunde inte ladda words.txt', err);
+    DICTIONARY = new Set([
+      'påg','tös','mög','rälig','balle','skåne','malmö','lund','glass','katt','hund','boll','hus','sol','ord','spel'
+    ]);
+    dictCountEl.textContent = DICTIONARY.size;
+    setMessage('words.txt kunde inte laddas. Jag kör en liten reservordlista tills vidare.', 'error');
+  }
+}
 
     const BONUS = Array.from({ length: SIZE }, () => Array.from({ length: SIZE }, () => ''));
     const setBonus = (coords, type) => coords.forEach(([r, c]) => BONUS[r][c] = type);
@@ -1089,11 +1094,11 @@
     document.getElementById('newGameBtn').addEventListener('click', startNewGame);
 
     async function initGame() {
-      await loadDictionary();
-      startNewGame();
-    }
+  await loadDictionary();
+  startNewGame();
+}
 
-    initGame();
+initGame();
   </script>
 </body>
 </html>
